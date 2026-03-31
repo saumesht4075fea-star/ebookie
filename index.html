@@ -3,132 +3,206 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stark eBooks</title>
+<title>ebooks</title>
 
 <style>
-body {
-  margin:0;
-  font-family:Arial;
-  background:#0f172a;
-  color:white;
-}
+body {margin:0;font-family:Arial;background:#f1f3f6;}
 
 /* HEADER */
-header {
-  text-align:center;
-  padding:15px;
-  font-size:22px;
-  background:#020617;
+.header {
+  display:flex;
+  align-items:center;
+  background:#2874f0;
+  padding:10px;
+  color:white;
+}
+.logo {font-size:20px;font-weight:bold;margin-right:20px;}
+.search {flex:1;}
+.search input {width:100%;padding:8px;border:none;border-radius:3px;}
+.cart {margin-left:15px;cursor:pointer;}
+
+/* CATEGORY */
+.categories {
+  display:flex;
+  overflow:auto;
+  background:white;
+  padding:10px;
+}
+.cat {
+  margin-right:15px;
+  cursor:pointer;
+  font-size:14px;
 }
 
 /* PRODUCTS */
 .products {
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
   padding:20px;
 }
-
 .card {
-  background:#1e293b;
+  background:white;
   padding:10px;
-  border-radius:10px;
-  text-align:center;
+  border-radius:5px;
   cursor:pointer;
-  transition:0.3s;
 }
+.card:hover {box-shadow:0 2px 10px rgba(0,0,0,0.2);}
+.card img {width:100%;height:150px;object-fit:cover;}
+.price {color:green;font-weight:bold;}
+.old {text-decoration:line-through;color:gray;font-size:12px;}
+.rating {color:#facc15;font-size:13px;}
 
-.card:hover {
-  transform:scale(1.05);
-}
-
-.card img {
-  width:100%;
-  border-radius:8px;
-}
-
-/* FULL VIEW (HIDDEN) */
+/* FULL PRODUCT VIEW */
 .fullview {
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:#020617;
+  top:0;left:0;width:100%;height:100%;
+  background:white;
   display:none;
   flex-direction:column;
-  align-items:center;
-  justify-content:center;
   padding:20px;
+  overflow:auto;
 }
+.bigimg {width:100%;max-width:300px;}
+.btn {padding:12px;border:none;width:100%;margin-top:10px;}
+.buy {background:#fb641b;color:white;}
+.cartbtn {background:#ff9f00;color:white;}
+.back {cursor:pointer;margin-bottom:10px;}
 
-.fullview img {
-  width:80%;
-  max-width:300px;
-  border-radius:10px;
+/* CART PANEL */
+.cartpanel {
+  position:fixed;
+  right:0;top:0;
+  width:300px;height:100%;
+  background:white;
+  display:none;
+  flex-direction:column;
+  padding:15px;
+  box-shadow:-2px 0 10px rgba(0,0,0,0.3);
 }
-
-.close {
-  position:absolute;
-  top:20px;
-  right:20px;
-  font-size:25px;
-  cursor:pointer;
-}
-
-.btn {
-  padding:12px;
-  background:#00c853;
-  border:none;
-  color:white;
-  border-radius:6px;
-  margin-top:20px;
-}
+.cartitem {margin-bottom:10px;}
+.checkout {background:#00c853;color:white;padding:10px;text-align:center;cursor:pointer;}
 </style>
 </head>
 
 <body>
 
-<header>📚 Stark eBook Store</header>
-
-<section class="products">
-
-<div class="card" onclick="openProduct('ebook.jpg','Money Making Blueprint','₹99','Learn how to earn money online step by step.')">
-  <img src="ebook.jpg">
-  <h3>Money Making Blueprint</h3>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">Stark Store</div>
+  <div class="search">
+    <input type="text" placeholder="Search eBooks..." onkeyup="searchProducts(this.value)">
+  </div>
+  <div class="cart" onclick="toggleCart()">🛒 Cart</div>
 </div>
 
-<div class="card" onclick="openProduct('ebook.jpg','Instagram Growth','₹149','Grow your Instagram fast.')">
-  <img src="ebook.jpg">
-  <h3>Instagram Growth</h3>
+<!-- CATEGORIES -->
+<div class="categories">
+  <div class="cat" onclick="filter('all')">All</div>
+  <div class="cat" onclick="filter('money')">Money</div>
+  <div class="cat" onclick="filter('social')">Social</div>
 </div>
 
-</section>
+<!-- PRODUCTS -->
+<section class="products" id="products"></section>
 
-<!-- FULL VIEW -->
+<!-- PRODUCT FULL VIEW -->
 <div class="fullview" id="fullview">
-  <div class="close" onclick="closeProduct()">✖</div>
+  <div class="back" onclick="closeProduct()">⬅ Back</div>
 
-  <img id="pimg">
+  <img id="pimg" class="bigimg">
   <h2 id="ptitle"></h2>
   <p id="pdesc"></p>
+  <div id="prating"></div>
   <h3 id="pprice"></h3>
 
-  <button class="btn">Buy Now</button>
+  <button class="btn cartbtn" onclick="addToCart()">Add to Cart</button>
+  <button class="btn buy">Buy Now</button>
+</div>
+
+<!-- CART -->
+<div class="cartpanel" id="cartpanel">
+  <h3>Your Cart</h3>
+  <div id="cartitems"></div>
+  <div class="checkout">Checkout</div>
 </div>
 
 <script>
-function openProduct(img,title,price,desc){
+
+let products=[
+{img:"ebook.jpg",title:"Money Blueprint",price:"₹99",desc:"Earn money online",cat:"money",rating:"⭐⭐⭐⭐☆"},
+{img:"ebook.jpg",title:"Instagram Growth",price:"₹149",desc:"Grow fast",cat:"social",rating:"⭐⭐⭐⭐⭐"}
+];
+
+let cart=[];
+
+/* LOAD PRODUCTS */
+function loadProducts(list){
+  let html="";
+  list.forEach(p=>{
+    html+=`
+    <div class="card" onclick="openProduct('${p.img}','${p.title}','${p.price}','${p.desc}','${p.rating}')">
+      <img src="${p.img}">
+      <h4>${p.title}</h4>
+      <div class="rating">${p.rating}</div>
+      <p class="price">${p.price} <span class="old">₹199</span></p>
+    </div>`;
+  });
+  document.getElementById("products").innerHTML=html;
+}
+loadProducts(products);
+
+/* OPEN PRODUCT */
+let currentProduct;
+function openProduct(img,title,price,desc,rating){
   document.getElementById("fullview").style.display="flex";
   document.getElementById("pimg").src=img;
   document.getElementById("ptitle").innerText=title;
   document.getElementById("pprice").innerText=price;
   document.getElementById("pdesc").innerText=desc;
+  document.getElementById("prating").innerText=rating;
+  currentProduct={title,price};
 }
 
+/* CLOSE */
 function closeProduct(){
   document.getElementById("fullview").style.display="none";
 }
+
+/* CART */
+function addToCart(){
+  cart.push(currentProduct);
+  alert("Added to cart");
+}
+
+/* TOGGLE CART */
+function toggleCart(){
+  let panel=document.getElementById("cartpanel");
+  panel.style.display=panel.style.display=="flex"?"none":"flex";
+  panel.style.flexDirection="column";
+  renderCart();
+}
+
+/* RENDER CART */
+function renderCart(){
+  let html="";
+  cart.forEach(i=>{
+    html+=`<div class="cartitem">${i.title} - ${i.price}</div>`;
+  });
+  document.getElementById("cartitems").innerHTML=html;
+}
+
+/* FILTER */
+function filter(cat){
+  if(cat=="all") loadProducts(products);
+  else loadProducts(products.filter(p=>p.cat==cat));
+}
+
+/* SEARCH */
+function searchProducts(q){
+  loadProducts(products.filter(p=>p.title.toLowerCase().includes(q.toLowerCase())));
+}
+
 </script>
 
 </body>
