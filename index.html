@@ -163,6 +163,24 @@ footer{
     font-size: 1.1rem;
     text-align: center;
 }
+.search-input-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.search-input-container input {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #333845;
+  background: #171a21;
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+}
+.search-input-container input::placeholder {
+  color: var(--muted);
+}
 
 /* Responsive adjustments for product detail modal */
 @media (min-width: 768px) {
@@ -217,6 +235,9 @@ footer{
   <section id="books" class="page-section">
     <div class="wrap">
       <h2 class="section-title">Our Full Collection</h2>
+      <div class="search-input-container">
+        <input type="text" id="searchInput" onkeyup="filterBooks()" placeholder="Search by title or author...">
+      </div>
       <div class="product-grid" id="all-books-list">
         <!-- All books will be loaded here by JavaScript -->
       </div>
@@ -246,7 +267,7 @@ footer{
   © <span id="year"></span> Lume — All rights reserved
 </footer>
 
-<!-- Product Detail Modal (this is still a modal/popup) -->
+<!-- Product Detail Modal -->
 <div id="detail-modal" class="modal-overlay" onclick="closeModal('detail-modal', event)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <button class="close-btn" onclick="closeModal('detail-modal')">&times;</button>
@@ -257,7 +278,7 @@ footer{
                 <div class="author" id="detail-modal-author"></div>
                 <div class="price" id="detail-modal-price"></div>
                 <p id="detail-modal-description"></p>
-                <a href="#" class="btn buy-btn" onclick="alert('Simulated purchase for: ' + document.getElementById('detail-modal-title').textContent)">Buy Now</a>
+                <a id="buy-button" class="btn buy-btn" download>Buy Now</a>
             </div>
         </div>
     </div>
@@ -268,17 +289,17 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 const allBooks = [
   {id:1, title:"The Design Mind", author:"A. Rivera", price:"$19", description: "Unlock creative thinking and master innovative design principles. This book explores the psychology behind good design, offering practical insights for professionals and enthusiasts alike.",
-   img:"https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1200&auto=format&fit=crop"},
+   img:"https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1200&auto=format&fit=crop", downloadUrl: "https://www.africau.edu/images/default/sample.pdf"}, // Sample PDF
   {id:2, title:"Startup Playbook", author:"N. Patel", price:"$24", description: "A comprehensive guide for aspiring entrepreneurs. Learn the essential steps from ideation to launch, fundraising, and scaling your startup for success.",
-   img:"https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1200&auto=format&fit=crop"},
+   img:"https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1200&auto=format&fit=crop", downloadUrl: "https://www.africau.edu/images/default/sample.pdf"},
   {id:3, title:"Deep Work Essentials", author:"K. Lee", price:"$16", description: "Discover strategies to eliminate distractions and focus intensely on cognitively demanding tasks. Achieve more in less time with proven techniques for sustained concentration.",
-   img:"https://images.unsplash.com/photo-1524995997946-a1c2e3158b88?q=80&w=1200&auto=format&fit=crop"},
+   img:"https://images.unsplash.com/photo-1524995997946-a1c2e3158b88?q=80&w=1200&auto=format&fit=crop", downloadUrl: "https://www.africau.edu/images/default/sample.pdf"},
   {id:4, title:"Productivity Systems", author:"M. Chen", price:"$21", description: "Optimize your workflow with efficient productivity systems. This book covers various methodologies like Getting Things Done (GTD), Pomodoro, and Kanban to boost your output.",
-   img:"https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop"},
+   img:"https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop", downloadUrl: "https://www.africau.edu/images/default/sample.pdf"},
   {id:5, title:"Mastering UI/UX", author:"E. Wong", price:"$29", description: "A practical guide to creating user-friendly interfaces and delightful user experiences. Dive into user research, wireframing, prototyping, and usability testing.",
-   img:"https://images.unsplash.com/photo-1536762295627-111584c3c3a4?q=80&w=1200&auto=format&fit=crop"},
+   img:"https://images.unsplash.com/photo-1536762295627-111584c3c3a4?q=80&w=1200&auto=format&fit=crop", downloadUrl: "https://www.africau.edu/images/default/sample.pdf"},
   {id:6, title:"The Agile Leader", author:"J. Miller", price:"$22", description: "Transform your leadership style with agile principles. Learn how to foster adaptability, empower teams, and drive continuous improvement in any organization.",
-   img:"https://images.unsplash.com/photo-1510915228340-ff8736e6540c?q=80&w=1200&auto=format&fit=crop"}
+   img:"https://images.unsplash.com/photo-1510915228340-ff8736e6540c?q=80&w=1200&auto=format&fit=crop", downloadUrl: "https://www.africau.edu/images/default/sample.pdf"}
 ];
 
 // Function to generate a product card HTML
@@ -315,6 +336,15 @@ function showSection(sectionId) {
     }
     // Close any open modals when navigating sections
     closeModal('detail-modal');
+
+    // Specific actions for the 'books' section: clear search and reload all books
+    if (sectionId === 'books') {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = ''; // Clear search input
+            filterBooks(); // Re-apply filter (which will show all books if input is empty)
+        }
+    }
 }
 
 // Open Product Detail Modal
@@ -330,6 +360,16 @@ function openProductDetailModal(bookId) {
     document.getElementById('detail-modal-price').textContent = book.price;
     document.getElementById('detail-modal-description').textContent = book.description;
 
+    const buyButton = document.getElementById('buy-button');
+    if (book.downloadUrl) {
+        buyButton.href = book.downloadUrl;
+        buyButton.style.display = 'block'; // Ensure button is visible
+    } else {
+        buyButton.removeAttribute('href'); // Remove href if no download URL
+        buyButton.style.display = 'none'; // Hide if no download URL
+        // You might want to show an alert or a different message here if no download is available
+    }
+
     detailModal.classList.add('active'); // Use 'active' for modals
 }
 
@@ -340,6 +380,16 @@ function closeModal(modalId, event = null){
       return;
   }
   document.getElementById(modalId).classList.remove('active');
+}
+
+// Function to filter books based on search input
+function filterBooks() {
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  const filteredBooks = allBooks.filter(book =>
+    book.title.toLowerCase().includes(searchTerm) ||
+    book.author.toLowerCase().includes(searchTerm)
+  );
+  loadProducts('all-books-list', filteredBooks);
 }
 
 // Initialize homepage products on load and all books section
