@@ -12,6 +12,7 @@
   --accent:#d4b15a;
   --text:#e9eaf0;
   --muted:#a3a7b2;
+  --text-dark:#111;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{
@@ -19,6 +20,9 @@ body{
   background:var(--bg);
   color:var(--text);
   line-height:1.5;
+  min-height:100vh; /* Ensure body takes full height for sticky footer */
+  display:flex;
+  flex-direction:column;
 }
 header{
   position:sticky;top:0;z-index:10;
@@ -34,8 +38,15 @@ header{
 .brand{
   font-family:"Playfair Display",serif;
   font-size:1.4rem;letter-spacing:.5px;color:var(--accent);
+  text-decoration:none; /* Make logo clickable */
+  cursor:pointer;
 }
-.nav a{color:var(--text);text-decoration:none;margin-left:24px;font-weight:600;cursor:pointer}
+.nav a{
+  color:var(--text);text-decoration:none;margin-left:24px;font-weight:600;
+  cursor:pointer;
+  transition:color .2s ease;
+}
+.nav a:hover{color:var(--accent)}
 .hero{
   padding:80px 0 60px;
   background:
@@ -51,42 +62,39 @@ header{
 .btn{
   display:inline-block;margin-top:22px;
   padding:12px 22px;border-radius:10px;
-  background:var(--accent);color:#111;font-weight:700;text-decoration:none;cursor:pointer
+  background:var(--accent);color:var(--text-dark);font-weight:700;text-decoration:none;cursor:pointer;
+  transition:background .2s ease;
+}
+.btn:hover{background:#e3c66d}
+.section-title{
+  font-family:"Playfair Display",serif;font-size:2rem;margin-bottom:24px;text-align:center;
 }
 footer{
+  margin-top:auto; /* Pushes footer to the bottom */
   border-top:1px solid #222630;
   color:var(--muted);padding:30px 0;text-align:center;
 }
 
-/* Modal styles */
-.modal{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);
-  display:none;align-items:center;justify-content:center;
-  z-index:100;
+/* Page/Section Management */
+.page-section {
+    display: none; /* Hidden by default */
+    padding: 60px 0; /* Add padding to all content sections */
+    flex-grow: 1; /* Allow content sections to grow */
 }
-.modal.open{display:flex}
-.modal-content{
-  background:var(--card);
-  border:1px solid #232734;
-  border-radius:16px;
-  width:90%;max-width:1000px;max-height:85vh;
-  overflow:auto;padding:24px;
+.page-section.active {
+    display: block; /* Show active section */
 }
-.modal h2{
-  font-family:"Playfair Display",serif;
-  font-size:1.8rem;margin-bottom:16px;color:var(--accent);
-}
-.close{
-  position:absolute;top:16px;right:16px;
-  background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer
-}
-.grid{
+
+/* Product Grid (used for homepage featured and all books page) */
+.product-grid{
   display:grid;gap:24px;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  margin-top:40px;
 }
 .card{
   background:#101218;border:1px solid #232734;border-radius:16px;
-  overflow:hidden;transition:transform .2s ease, border-color .2s ease;
+  overflow:hidden;cursor:pointer;
+  transition:transform .2s ease, border-color .2s ease;
 }
 .card:hover{transform:translateY(-4px);border-color:#333845}
 .card img{
@@ -96,95 +104,249 @@ footer{
 .card h3{font-size:1.1rem;margin-bottom:6px}
 .card .author{color:var(--muted);font-size:.9rem}
 .card .price{margin-top:10px;font-weight:700}
+
+/* Product Detail Modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.8);
+  display:none;align-items:center;justify-content:center;
+  z-index:100;opacity:0;transition:opacity .3s ease;
+}
+.modal-overlay.active{display:flex;opacity:1}
+.modal-content{
+  background:var(--card);
+  border:1px solid #232734;
+  border-radius:16px;
+  width:90%;max-width:800px;max-height:85vh; /* Adjusted max-width */
+  overflow:auto;padding:24px;position:relative;
+  transform:scale(.95);opacity:0;transition:transform .3s ease, opacity .3s ease;
+}
+.modal-overlay.active .modal-content{transform:scale(1);opacity:1}
+
+.close-btn{
+  position:absolute;top:16px;right:16px;
+  background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;
+  z-index:10;
+}
+
+/* Product Detail Specific Styles */
+.product-detail-modal-body{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.product-detail-cover{
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    background: #101218;
+    border-radius: 8px;
+}
+.product-detail-info{
+    padding: 0 10px;
+}
+.product-detail-info h2{
+    font-family:"Playfair Display",serif;
+    font-size:2.2rem;margin-bottom:8px;color:var(--accent);
+}
+.product-detail-info .author{
+    color:var(--muted);font-size:1.1rem;margin-bottom:10px;
+}
+.product-detail-info .price{
+    font-size:1.8rem;font-weight:700;margin-bottom:20px;
+}
+.product-detail-info p{
+    color:var(--muted);margin-bottom:20px;
+}
+.product-detail-info .buy-btn{
+    width: 100%;
+    padding: 15px 0;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+/* Responsive adjustments for product detail modal */
+@media (min-width: 768px) {
+    .product-detail-modal-body{
+        flex-direction: row;
+        max-height: 600px;
+    }
+    .product-detail-cover{
+        width: 40%;
+        max-height: none;
+        object-fit: cover;
+    }
+    .product-detail-info{
+        width: 60%;
+        padding-left: 30px;
+    }
+}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap nav">
-    <div class="brand">Lume</div>
+    <a class="brand" onclick="showSection('home')">Lume</a>
     <nav>
-      <a onclick="openModal('browse')">Browse</a>
-      <a onclick="openModal('books')">Books</a>
-      <a onclick="openModal('about')">About</a>
+      <a onclick="showSection('books')">Books</a>
+      <a onclick="showSection('about')">About</a>
     </nav>
   </div>
 </header>
 
-<section class="hero">
-  <div class="wrap">
-    <h1>Read better. Think deeper.</h1>
-    <p>Curated ebooks on design, business, and technology. Instant download, lifetime access.</p>
-    <button class="btn" onclick="openModal('browse')">Browse Collection</button>
-  </div>
-</section>
+<main style="display:flex; flex-direction:column; flex-grow:1;">
+
+  <!-- HOME Section -->
+  <section id="home" class="page-section active">
+    <div class="hero">
+      <div class="wrap">
+        <h1>Read better. Think deeper.</h1>
+        <p>Curated ebooks on design, business, and technology. Instant download, lifetime access.</p>
+        <button class="btn" onclick="showSection('books')">Explore All Ebooks</button>
+      </div>
+    </div>
+    <div class="wrap">
+      <h2 class="section-title">Featured Ebooks</h2>
+      <div class="product-grid" id="homepage-product-list">
+        <!-- Featured books will be loaded here by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKS Section -->
+  <section id="books" class="page-section">
+    <div class="wrap">
+      <h2 class="section-title">Our Full Collection</h2>
+      <div class="product-grid" id="all-books-list">
+        <!-- All books will be loaded here by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT Section -->
+  <section id="about" class="page-section">
+    <div class="wrap" style="text-align:center;">
+      <h2 class="section-title">About Lume</h2>
+      <p style="color:var(--muted);line-height:1.7;max-width:760px;margin:0 auto;">
+        Lume is a minimalist ebook store dedicated to providing high-quality digital books
+        for curious minds. We believe in knowledge that empowers and inspires,
+        curating titles across design, business, and technology.
+        Every purchase grants you instant access and lifetime ownership of your digital reads.
+        Our mission is to make insightful literature accessible and enjoyable for everyone.
+        <br><br>
+        Reach out to us at <a href="mailto:info@lume.com" style="color:var(--accent);text-decoration:none;">info@lume.com</a>
+        for inquiries or collaborations.
+      </p>
+    </div>
+  </section>
+
+</main>
 
 <footer>
   © <span id="year"></span> Lume — All rights reserved
 </footer>
 
-<!-- Modal -->
-<div id="modal" class="modal" onclick="closeModal(event)">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <button class="close" onclick="closeModal()">&times;</button>
-    <h2 id="modal-title">Browse</h2>
-    <div id="modal-body"></div>
-  </div>
+<!-- Product Detail Modal (this is still a modal/popup) -->
+<div id="detail-modal" class="modal-overlay" onclick="closeModal('detail-modal', event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="close-btn" onclick="closeModal('detail-modal')">&times;</button>
+        <div class="product-detail-modal-body">
+            <img id="detail-modal-cover" class="product-detail-cover" src="" alt="Book cover">
+            <div class="product-detail-info">
+                <h2 id="detail-modal-title"></h2>
+                <div class="author" id="detail-modal-author"></div>
+                <div class="price" id="detail-modal-price"></div>
+                <p id="detail-modal-description"></p>
+                <a href="#" class="btn buy-btn" onclick="alert('Simulated purchase for: ' + document.getElementById('detail-modal-title').textContent)">Buy Now</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
-const books = [
-  {title:"The Design Mind", author:"A. Rivera", price:"$19",
+const allBooks = [
+  {id:1, title:"The Design Mind", author:"A. Rivera", price:"$19", description: "Unlock creative thinking and master innovative design principles. This book explores the psychology behind good design, offering practical insights for professionals and enthusiasts alike.",
    img:"https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1200&auto=format&fit=crop"},
-  {title:"Startup Playbook", author:"N. Patel", price:"$24",
+  {id:2, title:"Startup Playbook", author:"N. Patel", price:"$24", description: "A comprehensive guide for aspiring entrepreneurs. Learn the essential steps from ideation to launch, fundraising, and scaling your startup for success.",
    img:"https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1200&auto=format&fit=crop"},
-  {title:"Deep Work Essentials", author:"K. Lee", price:"$16",
+  {id:3, title:"Deep Work Essentials", author:"K. Lee", price:"$16", description: "Discover strategies to eliminate distractions and focus intensely on cognitively demanding tasks. Achieve more in less time with proven techniques for sustained concentration.",
    img:"https://images.unsplash.com/photo-1524995997946-a1c2e3158b88?q=80&w=1200&auto=format&fit=crop"},
-  {title:"Productivity Systems", author:"M. Chen", price:"$21",
-   img:"https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop"}
+  {id:4, title:"Productivity Systems", author:"M. Chen", price:"$21", description: "Optimize your workflow with efficient productivity systems. This book covers various methodologies like Getting Things Done (GTD), Pomodoro, and Kanban to boost your output.",
+   img:"https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop"},
+  {id:5, title:"Mastering UI/UX", author:"E. Wong", price:"$29", description: "A practical guide to creating user-friendly interfaces and delightful user experiences. Dive into user research, wireframing, prototyping, and usability testing.",
+   img:"https://images.unsplash.com/photo-1536762295627-111584c3c3a4?q=80&w=1200&auto=format&fit=crop"},
+  {id:6, title:"The Agile Leader", author:"J. Miller", price:"$22", description: "Transform your leadership style with agile principles. Learn how to foster adaptability, empower teams, and drive continuous improvement in any organization.",
+   img:"https://images.unsplash.com/photo-1510915228340-ff8736e6540c?q=80&w=1200&auto=format&fit=crop"}
 ];
 
-function openModal(type){
-  const modal = document.getElementById('modal');
-  const title = document.getElementById('modal-title');
-  const body = document.getElementById('modal-body');
-  body.innerHTML = '';
+// Function to generate a product card HTML
+function createProductCard(book) {
+  return `
+    <article class="card" onclick="openProductDetailModal(${book.id})">
+      <img src="${book.img}" alt="${book.title} cover">
+      <div class="card-body">
+        <h3>${book.title}</h3>
+        <div class="author">by ${book.author}</div>
+        <div class="price">${book.price}</div>
+      </div>
+    </article>`;
+}
 
-  if(type === 'browse' || type === 'books'){
-    title.textContent = type === 'browse' ? 'Browse Collection' : 'All Books';
-    const grid = document.createElement('div');
-    grid.className = 'grid';
-    books.forEach(b=>{
-      grid.innerHTML += `
-        <article class="card">
-          <img src="${b.img}" alt="${b.title}">
-          <div class="card-body">
-            <h3>${b.title}</h3>
-            <div class="author">by ${b.author}</div>
-            <div class="price">${b.price}</div>
-          </div>
-        </article>`;
+// Function to load products into a given list element
+function loadProducts(elementId, booksToLoad) {
+  const productList = document.getElementById(elementId);
+  if (productList) {
+    productList.innerHTML = booksToLoad.map(createProductCard).join('');
+  }
+}
+
+// Show specific section and hide others
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
     });
-    body.appendChild(grid);
-  }
-
-  if(type === 'about'){
-    title.textContent = 'About Us';
-    body.innerHTML = `<p style="color:var(--muted);line-height:1.7">
-      Lume is a minimalist ebook store. We curate high-quality digital books on design,
-      business, and technology. Every purchase gives you lifetime access and instant download.
-      Replace this text with your own story, mission, and contact details.
-    </p>`;
-  }
-
-  modal.classList.add('open');
+    // Show the requested section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+    // Close any open modals when navigating sections
+    closeModal('detail-modal');
 }
 
-function closeModal(e){
-  document.getElementById('modal').classList.remove('open');
+// Open Product Detail Modal
+function openProductDetailModal(bookId) {
+    const book = allBooks.find(b => b.id === bookId);
+    if (!book) return;
+
+    const detailModal = document.getElementById('detail-modal');
+    document.getElementById('detail-modal-cover').src = book.img;
+    document.getElementById('detail-modal-cover').alt = `${book.title} cover`;
+    document.getElementById('detail-modal-title').textContent = book.title;
+    document.getElementById('detail-modal-author').textContent = `by ${book.author}`;
+    document.getElementById('detail-modal-price').textContent = book.price;
+    document.getElementById('detail-modal-description').textContent = book.description;
+
+    detailModal.classList.add('active'); // Use 'active' for modals
 }
+
+// Close Modal
+function closeModal(modalId, event = null){
+  // Prevent closing when clicking inside modal-content itself
+  if (event && event.target.closest('.modal-content')) {
+      return;
+  }
+  document.getElementById(modalId).classList.remove('active');
+}
+
+// Initialize homepage products on load and all books section
+document.addEventListener('DOMContentLoaded', () => {
+  loadProducts('homepage-product-list', allBooks.slice(0, 3)); // Display first 3 as featured
+  loadProducts('all-books-list', allBooks); // Load all books for the 'Books' section
+});
 </script>
 </body>
 </html>
