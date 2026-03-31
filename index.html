@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lume — Premium Ebook Store</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght=600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0f1115;
@@ -36,49 +35,67 @@ header{
   font-family:"Playfair Display",serif;
   font-size:1.4rem;letter-spacing:.5px;color:var(--accent);
 }
-.nav a{color:var(--text);text-decoration:none;margin-left:24px;font-weight:600}
+.nav a{color:var(--text);text-decoration:none;margin-left:24px;font-weight:600;cursor:pointer}
 .hero{
   padding:80px 0 60px;
   background:
     radial-gradient(1200px 500px at 80% -10%, #d4b15a22, transparent 60%),
     radial-gradient(900px 400px at 10% 10%, #7aa2ff22, transparent 60%);
+  text-align:center;
 }
 .hero h1{
   font-family:"Playfair Display",serif;
   font-size:2.8rem;margin-bottom:12px;
 }
-.hero p{color:var(--muted);max-width:640px}
+.hero p{color:var(--muted);max-width:640px;margin:0 auto}
 .btn{
   display:inline-block;margin-top:22px;
   padding:12px 22px;border-radius:10px;
-  background:var(--accent);color:#111;font-weight:700;text-decoration:none;
+  background:var(--accent);color:#111;font-weight:700;text-decoration:none;cursor:pointer
 }
-.section{padding:60px 0}
-.grid{
-  display:grid;gap:24px;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-}
-.card{
-  background:var(--card);border:1px solid #232734;border-radius:16px;
-  overflow:hidden;transition:transform .2s ease, border-color .2s ease;
-}
-.card:hover{transform:translateY(-4px);border-color:#333845}
-.card img{
-  width:100%;height:340px;object-fit:cover;background:#101218;
-}
-.card-body{padding:16px}
-.card h3{font-size:1.1rem;margin-bottom:6px}
-.card .author{color:var(--muted);font-size:.9rem}
-.card .price{margin-top:10px;font-weight:700}
 footer{
   border-top:1px solid #222630;
   color:var(--muted);padding:30px 0;text-align:center;
 }
-.badge{
-  display:inline-block;font-size:.75rem;padding:4px 8px;
-  border:1px solid var(--accent);color:var(--accent);
-  border-radius:999px;margin-bottom:10px;
+
+/* Modal styles */
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  display:none;align-items:center;justify-content:center;
+  z-index:100;
 }
+.modal.open{display:flex}
+.modal-content{
+  background:var(--card);
+  border:1px solid #232734;
+  border-radius:16px;
+  width:90%;max-width:1000px;max-height:85vh;
+  overflow:auto;padding:24px;
+}
+.modal h2{
+  font-family:"Playfair Display",serif;
+  font-size:1.8rem;margin-bottom:16px;color:var(--accent);
+}
+.close{
+  position:absolute;top:16px;right:16px;
+  background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer
+}
+.grid{
+  display:grid;gap:24px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+.card{
+  background:#101218;border:1px solid #232734;border-radius:16px;
+  overflow:hidden;transition:transform .2s ease, border-color .2s ease;
+}
+.card:hover{transform:translateY(-4px);border-color:#333845}
+.card img{
+  width:100%;height:280px;object-fit:cover;background:#101218;
+}
+.card-body{padding:14px}
+.card h3{font-size:1.1rem;margin-bottom:6px}
+.card .author{color:var(--muted);font-size:.9rem}
+.card .price{margin-top:10px;font-weight:700}
 </style>
 </head>
 <body>
@@ -87,71 +104,87 @@ footer{
   <div class="wrap nav">
     <div class="brand">Lume</div>
     <nav>
-      <a href="#books">Books</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      <a onclick="openModal('browse')">Browse</a>
+      <a onclick="openModal('books')">Books</a>
+      <a onclick="openModal('about')">About</a>
     </nav>
   </div>
 </header>
 
 <section class="hero">
   <div class="wrap">
-    <span class="badge">New Releases</span>
     <h1>Read better. Think deeper.</h1>
     <p>Curated ebooks on design, business, and technology. Instant download, lifetime access.</p>
-    <a class="btn" href="#books">Browse Collection</a>
+    <button class="btn" onclick="openModal('browse')">Browse Collection</button>
   </div>
 </section>
 
-<section id="books" class="section">
-  <div class="wrap">
-    <div class="grid">
-      <!-- Book Card -->
-      <article class="card">
-        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1200&auto=format&fit=crop" alt="Ebook cover">
-        <div class="card-body">
-          <h3>The Design Mind</h3>
-          <div class="author">by A. Rivera</div>
-          <div class="price">$19</div>
-        </div>
-      </article>
-
-      <article class="card">
-        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1200&auto=format&fit=crop" alt="Ebook cover">
-        <div class="card-body">
-          <h3>Startup Playbook</h3>
-          <div class="author">by N. Patel</div>
-          <div class="price">$24</div>
-        </div>
-      </article>
-
-      <article class="card">
-        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e3158b88?q=80&w=1200&auto=format&fit=crop" alt="Ebook cover">
-        <div class="card-body">
-          <h3>Deep Work Essentials</h3>
-          <div class="author">by K. Lee</div>
-          <div class="price">$16</div>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section id="about" class="section">
-  <div class="wrap">
-    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:10px">About</h2>
-    <p style="color:var(--muted);max-width:760px">
-      Lume is a minimalist ebook store template. Replace the images, titles, authors, and prices with your own. All styling is in one file so you can edit it directly.
-    </p>
-  </div>
-</section>
-
-<footer id="contact">
+<footer>
   © <span id="year"></span> Lume — All rights reserved
 </footer>
 
+<!-- Modal -->
+<div id="modal" class="modal" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeModal()">&times;</button>
+    <h2 id="modal-title">Browse</h2>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
+
+const books = [
+  {title:"The Design Mind", author:"A. Rivera", price:"$19",
+   img:"https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1200&auto=format&fit=crop"},
+  {title:"Startup Playbook", author:"N. Patel", price:"$24",
+   img:"https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1200&auto=format&fit=crop"},
+  {title:"Deep Work Essentials", author:"K. Lee", price:"$16",
+   img:"https://images.unsplash.com/photo-1524995997946-a1c2e3158b88?q=80&w=1200&auto=format&fit=crop"},
+  {title:"Productivity Systems", author:"M. Chen", price:"$21",
+   img:"https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop"}
+];
+
+function openModal(type){
+  const modal = document.getElementById('modal');
+  const title = document.getElementById('modal-title');
+  const body = document.getElementById('modal-body');
+  body.innerHTML = '';
+
+  if(type === 'browse' || type === 'books'){
+    title.textContent = type === 'browse' ? 'Browse Collection' : 'All Books';
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    books.forEach(b=>{
+      grid.innerHTML += `
+        <article class="card">
+          <img src="${b.img}" alt="${b.title}">
+          <div class="card-body">
+            <h3>${b.title}</h3>
+            <div class="author">by ${b.author}</div>
+            <div class="price">${b.price}</div>
+          </div>
+        </article>`;
+    });
+    body.appendChild(grid);
+  }
+
+  if(type === 'about'){
+    title.textContent = 'About Us';
+    body.innerHTML = `<p style="color:var(--muted);line-height:1.7">
+      Lume is a minimalist ebook store. We curate high-quality digital books on design,
+      business, and technology. Every purchase gives you lifetime access and instant download.
+      Replace this text with your own story, mission, and contact details.
+    </p>`;
+  }
+
+  modal.classList.add('open');
+}
+
+function closeModal(e){
+  document.getElementById('modal').classList.remove('open');
+}
 </script>
 </body>
 </html>
