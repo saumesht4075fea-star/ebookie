@@ -3,207 +3,155 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ebooks</title>
-
+<title>Lume — Premium Ebook Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 <style>
-body {margin:0;font-family:Arial;background:#f1f3f6;}
-
-/* HEADER */
-.header {
-  display:flex;
-  align-items:center;
-  background:#2874f0;
-  padding:10px;
-  color:white;
+:root{
+  --bg:#0f1115;
+  --card:#171a21;
+  --accent:#d4b15a;
+  --text:#e9eaf0;
+  --muted:#a3a7b2;
 }
-.logo {font-size:20px;font-weight:bold;margin-right:20px;}
-.search {flex:1;}
-.search input {width:100%;padding:8px;border:none;border-radius:3px;}
-.cart {margin-left:15px;cursor:pointer;}
-
-/* CATEGORY */
-.categories {
-  display:flex;
-  overflow:auto;
-  background:white;
-  padding:10px;
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.5;
 }
-.cat {
-  margin-right:15px;
-  cursor:pointer;
-  font-size:14px;
+header{
+  position:sticky;top:0;z-index:10;
+  backdrop-filter:saturate(180%) blur(10px);
+  background:rgba(15,17,21,0.85);
+  border-bottom:1px solid #222630;
 }
-
-/* PRODUCTS */
-.products {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-  padding:20px;
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;
 }
-.card {
-  background:white;
-  padding:10px;
-  border-radius:5px;
-  cursor:pointer;
+.brand{
+  font-family:"Playfair Display",serif;
+  font-size:1.4rem;letter-spacing:.5px;color:var(--accent);
 }
-.card:hover {box-shadow:0 2px 10px rgba(0,0,0,0.2);}
-.card img {width:100%;height:150px;object-fit:cover;}
-.price {color:green;font-weight:bold;}
-.old {text-decoration:line-through;color:gray;font-size:12px;}
-.rating {color:#facc15;font-size:13px;}
-
-/* FULL PRODUCT VIEW */
-.fullview {
-  position:fixed;
-  top:0;left:0;width:100%;height:100%;
-  background:white;
-  display:none;
-  flex-direction:column;
-  padding:20px;
-  overflow:auto;
+.nav a{color:var(--text);text-decoration:none;margin-left:24px;font-weight:600}
+.hero{
+  padding:80px 0 60px;
+  background:
+    radial-gradient(1200px 500px at 80% -10%, #d4b15a22, transparent 60%),
+    radial-gradient(900px 400px at 10% 10%, #7aa2ff22, transparent 60%);
 }
-.bigimg {width:100%;max-width:300px;}
-.btn {padding:12px;border:none;width:100%;margin-top:10px;}
-.buy {background:#fb641b;color:white;}
-.cartbtn {background:#ff9f00;color:white;}
-.back {cursor:pointer;margin-bottom:10px;}
-
-/* CART PANEL */
-.cartpanel {
-  position:fixed;
-  right:0;top:0;
-  width:300px;height:100%;
-  background:white;
-  display:none;
-  flex-direction:column;
-  padding:15px;
-  box-shadow:-2px 0 10px rgba(0,0,0,0.3);
+.hero h1{
+  font-family:"Playfair Display",serif;
+  font-size:2.8rem;margin-bottom:12px;
 }
-.cartitem {margin-bottom:10px;}
-.checkout {background:#00c853;color:white;padding:10px;text-align:center;cursor:pointer;}
+.hero p{color:var(--muted);max-width:640px}
+.btn{
+  display:inline-block;margin-top:22px;
+  padding:12px 22px;border-radius:10px;
+  background:var(--accent);color:#111;font-weight:700;text-decoration:none;
+}
+.section{padding:60px 0}
+.grid{
+  display:grid;gap:24px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+}
+.card{
+  background:var(--card);border:1px solid #232734;border-radius:16px;
+  overflow:hidden;transition:transform .2s ease, border-color .2s ease;
+}
+.card:hover{transform:translateY(-4px);border-color:#333845}
+.card img{
+  width:100%;height:340px;object-fit:cover;background:#101218;
+}
+.card-body{padding:16px}
+.card h3{font-size:1.1rem;margin-bottom:6px}
+.card .author{color:var(--muted);font-size:.9rem}
+.card .price{margin-top:10px;font-weight:700}
+footer{
+  border-top:1px solid #222630;
+  color:var(--muted);padding:30px 0;text-align:center;
+}
+.badge{
+  display:inline-block;font-size:.75rem;padding:4px 8px;
+  border:1px solid var(--accent);color:var(--accent);
+  border-radius:999px;margin-bottom:10px;
+}
 </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="logo">Stark Store</div>
-  <div class="search">
-    <input type="text" placeholder="Search eBooks..." onkeyup="searchProducts(this.value)">
+<header>
+  <div class="wrap nav">
+    <div class="brand">Lume</div>
+    <nav>
+      <a href="#books">Books</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </div>
-  <div class="cart" onclick="toggleCart()">🛒 Cart</div>
-</div>
+</header>
 
-<!-- CATEGORIES -->
-<div class="categories">
-  <div class="cat" onclick="filter('all')">All</div>
-  <div class="cat" onclick="filter('money')">Money</div>
-  <div class="cat" onclick="filter('social')">Social</div>
-</div>
+<section class="hero">
+  <div class="wrap">
+    <span class="badge">New Releases</span>
+    <h1>Read better. Think deeper.</h1>
+    <p>Curated ebooks on design, business, and technology. Instant download, lifetime access.</p>
+    <a class="btn" href="#books">Browse Collection</a>
+  </div>
+</section>
 
-<!-- PRODUCTS -->
-<section class="products" id="products"></section>
+<section id="books" class="section">
+  <div class="wrap">
+    <div class="grid">
+      <!-- Book Card -->
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1200&auto=format&fit=crop" alt="Ebook cover">
+        <div class="card-body">
+          <h3>The Design Mind</h3>
+          <div class="author">by A. Rivera</div>
+          <div class="price">$19</div>
+        </div>
+      </article>
 
-<!-- PRODUCT FULL VIEW -->
-<div class="fullview" id="fullview">
-  <div class="back" onclick="closeProduct()">⬅ Back</div>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1200&auto=format&fit=crop" alt="Ebook cover">
+        <div class="card-body">
+          <h3>Startup Playbook</h3>
+          <div class="author">by N. Patel</div>
+          <div class="price">$24</div>
+        </div>
+      </article>
 
-  <img id="pimg" class="bigimg">
-  <h2 id="ptitle"></h2>
-  <p id="pdesc"></p>
-  <div id="prating"></div>
-  <h3 id="pprice"></h3>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e3158b88?q=80&w=1200&auto=format&fit=crop" alt="Ebook cover">
+        <div class="card-body">
+          <h3>Deep Work Essentials</h3>
+          <div class="author">by K. Lee</div>
+          <div class="price">$16</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
 
-  <button class="btn cartbtn" onclick="addToCart()">Add to Cart</button>
-  <button class="btn buy">Buy Now</button>
-</div>
+<section id="about" class="section">
+  <div class="wrap">
+    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:10px">About</h2>
+    <p style="color:var(--muted);max-width:760px">
+      Lume is a minimalist ebook store template. Replace the images, titles, authors, and prices with your own. All styling is in one file so you can edit it directly.
+    </p>
+  </div>
+</section>
 
-<!-- CART -->
-<div class="cartpanel" id="cartpanel">
-  <h3>Your Cart</h3>
-  <div id="cartitems"></div>
-  <div class="checkout">Checkout</div>
-</div>
+<footer id="contact">
+  © <span id="year"></span> Lume — All rights reserved
+</footer>
 
 <script>
-
-let products=[
-{img:"ebook.jpg",title:"Money Blueprint",price:"₹99",desc:"Earn money online",cat:"money",rating:"⭐⭐⭐⭐☆"},
-{img:"ebook.jpg",title:"Instagram Growth",price:"₹149",desc:"Grow fast",cat:"social",rating:"⭐⭐⭐⭐⭐"}
-];
-
-let cart=[];
-
-/* LOAD PRODUCTS */
-function loadProducts(list){
-  let html="";
-  list.forEach(p=>{
-    html+=`
-    <div class="card" onclick="openProduct('${p.img}','${p.title}','${p.price}','${p.desc}','${p.rating}')">
-      <img src="${p.img}">
-      <h4>${p.title}</h4>
-      <div class="rating">${p.rating}</div>
-      <p class="price">${p.price} <span class="old">₹199</span></p>
-    </div>`;
-  });
-  document.getElementById("products").innerHTML=html;
-}
-loadProducts(products);
-
-/* OPEN PRODUCT */
-let currentProduct;
-function openProduct(img,title,price,desc,rating){
-  document.getElementById("fullview").style.display="flex";
-  document.getElementById("pimg").src=img;
-  document.getElementById("ptitle").innerText=title;
-  document.getElementById("pprice").innerText=price;
-  document.getElementById("pdesc").innerText=desc;
-  document.getElementById("prating").innerText=rating;
-  currentProduct={title,price};
-}
-
-/* CLOSE */
-function closeProduct(){
-  document.getElementById("fullview").style.display="none";
-}
-
-/* CART */
-function addToCart(){
-  cart.push(currentProduct);
-  alert("Added to cart");
-}
-
-/* TOGGLE CART */
-function toggleCart(){
-  let panel=document.getElementById("cartpanel");
-  panel.style.display=panel.style.display=="flex"?"none":"flex";
-  panel.style.flexDirection="column";
-  renderCart();
-}
-
-/* RENDER CART */
-function renderCart(){
-  let html="";
-  cart.forEach(i=>{
-    html+=`<div class="cartitem">${i.title} - ${i.price}</div>`;
-  });
-  document.getElementById("cartitems").innerHTML=html;
-}
-
-/* FILTER */
-function filter(cat){
-  if(cat=="all") loadProducts(products);
-  else loadProducts(products.filter(p=>p.cat==cat));
-}
-
-/* SEARCH */
-function searchProducts(q){
-  loadProducts(products.filter(p=>p.title.toLowerCase().includes(q.toLowerCase())));
-}
-
+document.getElementById('year').textContent = new Date().getFullYear();
 </script>
-
 </body>
 </html>
