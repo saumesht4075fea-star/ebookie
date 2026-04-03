@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lumee — Premium Ebook Store (No Firebase)</title>
+<title>Lumee — Premium Ebook Store </title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 <style>
 /* --- Global Variables and Base Styles --- */
@@ -206,4 +206,855 @@ display: flex; /* Always flex inside, visible/hidden by parent active class */
 flex-direction: column;
 }
 .modal-overlay.active >.modal-content {
-transform:
+transform: scale(1);
+opacity: 1;
+}
+
+.close-btn{
+position:absolute;top:16px;right:16px;
+background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;
+z-index:10;
+}
+
+/* --- Auth Modal Specific Styles - Premium Look --- */
+.auth-modal-content { /* Applied to all auth-related modal contents */
+max-width: 400px;
+text-align: center;
+padding: 30px;
+background: var(--card);
+border: 1px solid #232734;
+box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.auth-modal-content h2 {
+font-family:"Playfair Display",serif;
+margin-bottom: 25px;
+color: var(--text);
+font-size: 2rem;
+}
+.auth-modal-content form {
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+.auth-modal-content input {
+padding: 12px;
+border-radius: 8px;
+border: 1px solid #333845;
+background: #171a21;
+color: var(--text);
+font-size: 1rem;
+box-sizing: border-box;
+width: 100%;
+}
+.auth-modal-content input::placeholder {
+color: var(--muted);
+}
+.auth-modal-content button[type="submit"] {
+background: var(--accent);
+color: var(--text-dark);
+font-weight: 700;
+padding: 14px 22px;
+border-radius: 10px;
+border: none;
+cursor: pointer;
+transition: background.2s ease;
+font-size: 1.1rem;
+width: 100%;
+margin-top: 10px;
+}
+.auth-modal-content button[type="submit"]:hover {
+background: #e3c66d;
+}
+.auth-modal-content p {
+font-size: 0.95rem;
+color: var(--muted);
+margin-top: 15px;
+}
+.auth-modal-content p a {
+color: var(--accent);
+text-decoration: none;
+font-weight: 600;
+transition: color.2s ease;
+}
+.auth-modal-content p a:hover {
+color: #e3c66d;
+}
+.auth-modal-content.auth-error { /* Class instead of ID */
+color: var(--error-red);
+margin-top: 15px;
+font-size: 0.9rem;
+display: none;
+}
+
+/* Admin Panel Specific Styles */
+#admin-panel-container {
+display: none;
+background: var(--card);
+border: 1px solid #232734;
+border-radius: 16px;
+padding: 30px;
+margin-top: 40px;
+max-width: 800px;
+margin-left: auto;
+margin-right: auto;
+}
+#admin-panel-container h2 {
+text-align: center;
+margin-bottom: 30px;
+font-family: "Playfair Display", serif;
+font-size: 2.2rem;
+color: var(--accent);
+}
+#add-ebook-form-admin label {
+display: block;
+margin-bottom: 8px;
+font-weight: 600;
+color: var(--text);
+}
+#add-ebook-form-admin input[type="text"],
+#add-ebook-form-admin input[type="number"],
+#add-ebook-form-admin textarea {
+width: 100%;
+padding: 12px;
+margin-bottom: 20px;
+border-radius: 8px;
+border: 1px solid #333845;
+background: #101218;
+color: var(--text);
+font-size: 1rem;
+outline: none;
+}
+#add-ebook-form-admin input[type="text"]::placeholder,
+#add-ebook-form-admin textarea::placeholder {
+color: var(--muted);
+}
+#add-ebook-form-admin textarea {
+resize: vertical;
+min-height: 80px;
+}
+#add-ebook-form-admin button {
+display: block;
+width: 100%;
+padding: 14px 22px;
+border-radius: 10px;
+background: var(--accent);
+color: var(--text-dark);
+font-weight: 700;
+text-decoration: none;
+cursor: pointer;
+transition: background.2s ease;
+font-size: 1.1rem;
+border: none;
+margin-top: 20px;
+}
+#add-ebook-form-admin button:hover {
+background: #e3c66d;
+}
+#admin-message {
+margin-top: 20px;
+text-align: center;
+font-weight: 600;
+font-size: 1.1rem;
+}
+#admin-message.success {
+color: #66bb6a;
+}
+#admin-message.error {
+color: var(--error-red);
+}
+
+/* Ebook Detail Page Styles */
+#ebook-detail-content {
+display: flex;
+flex-direction: column;
+gap: 40px;
+padding-top: 20px; /* Space for back button */
+}
+#ebook-detail-main {
+display: flex;
+flex-direction: column;
+gap: 30px;
+}
+#ebook-detail-cover-img {
+width: 100%;
+max-width: 300px;
+height: auto;
+object-fit: contain;
+background: #101218;
+border-radius: 8px;
+align-self: center;
+}
+#ebook-detail-info {
+text-align: center;
+}
+#ebook-detail-info h2 {
+font-family: "Playfair Display", serif;
+font-size: 2.5rem;
+margin-bottom: 10px;
+color: var(--accent);
+}
+#ebook-detail-info.author {
+color: var(--muted);
+font-size: 1.2rem;
+margin-bottom: 15px;
+}
+#ebook-detail-info.price {
+font-size: 2rem;
+font-weight: 700;
+margin-bottom: 25px;
+}
+#ebook-detail-info p {
+color: var(--muted);
+line-height: 1.8;
+margin-bottom: 30px;
+}
+.detail-buy-btn {
+width: 100%;
+max-width: 300px;
+align-self: center;
+font-size: 1.2rem;
+padding: 15px 0;
+}
+@media (min-width: 768px) {
+#ebook-detail-main {
+flex-direction: row;
+align-items: flex-start;
+text-align: left;
+}
+#ebook-detail-cover-img {
+width: 35%;
+max-width: 350px;
+}
+#ebook-detail-info {
+width: 65%;
+padding-left: 40px;
+text-align: left;
+}
+.detail-buy-btn {
+width: auto;
+align-self: flex-start;
+}
+}
+.related-books-section {
+margin-top: 50px;
+border-top: 1px solid #232734;
+padding-top: 50px;
+}
+.related-books-section h3 {
+font-family: "Playfair Display", serif;
+font-size: 1.8rem;
+margin-bottom: 20px;
+text-align: center;
+}
+.back-button-container {
+padding-bottom: 20px;
+}
+.back-button {
+background: none;
+border: 1px solid var(--muted);
+color: var(--muted);
+padding: 8px 15px;
+border-radius: 8px;
+cursor: pointer;
+font-size: 0.9rem;
+transition: all 0.2s ease;
+}
+.back-button:hover {
+color: var(--accent);
+border-color: var(--accent);
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="wrap nav">
+<a class="brand" onclick="showSection('home')">Lumee</a>
+<nav>
+<a onclick="showSection('books')">Books</a>
+<a onclick="showSection('about')">About</a>
+<a id="adminNavLink" onclick="showSection('admin')" style="display:none;">Admin</a> <!-- Initially hidden -->
+<span id="authControls">
+<!-- Will be populated by JS -->
+</span>
+</nav>
+</div>
+</header>
+
+<main style="display:flex; flex-direction:column; flex-grow:1;">
+
+<!-- HOME Section -->
+<section id="home" class="page-section active">
+<div class="hero">
+<div class="wrap">
+<h1>Read better. Think deeper.</h1>
+<p>Curated ebooks on design, business, and technology. Instant download, lifetime access.</p>
+<button class="btn" onclick="showSection('books')">Explore All Ebooks</button>
+</div>
+</div>
+<div class="wrap">
+<h2 class="section-title">Featured Ebooks</h2>
+<div class="product-grid" id="homepage-ebook-list">
+<p>Loading featured ebooks...</p>
+</div>
+</div>
+</section>
+
+<!-- BOOKS Section -->
+<section id="books" class="page-section">
+<div class="wrap">
+<h2 class="section-title">Our Full Collection</h2>
+<div class="search-input-container">
+<input type="text" id="searchInput" onkeyup="filterBooks()" placeholder="Search by title or author...">
+</div>
+<div class="product-grid" id="all-books-list">
+<p>Loading all ebooks...</p>
+</div>
+</div>
+</section>
+
+<!-- ABOUT Section -->
+<section id="about" class="page-section">
+<div class="wrap" style="text-align:center;">
+<h2 class="section-title">About Lumee</h2>
+<p style="color:var(--muted);line-height:1.7;max-width:760px;margin:0 auto;">
+Lumee is a minimalist ebook store dedicated to providing high-quality digital books
+for curious minds. We believe in knowledge that empowers and inspires,
+curating titles across design, business, and technology.
+Every purchase grants you instant access and lifetime ownership of your digital reads.
+Our mission is to make insightful literature accessible and enjoyable for everyone.
+<br><br>
+Reach out to us at <a href="mailto:info@lumee.com" style="color:var(--accent);text-decoration:none;">info@lumee.com</a>
+for inquiries or collaborations.
+</p>
+</div>
+</section>
+
+<!-- Admin Section -->
+<section id="admin" class="page-section">
+<div class="wrap">
+<div id="admin-panel-container">
+<h2>Admin Panel</h2>
+<form id="add-ebook-form-admin">
+<label for="ebook-title-admin">Title:</label>
+<input type="text" id="ebook-title-admin" placeholder="e.g., The Design Thinking Handbook" required>
+
+<label for="ebook-author-admin">Author:</label>
+<input type="text" id="ebook-author-admin" placeholder="e.g., Jane Doe" required>
+
+<label for="ebook-price-admin">Price (₹):</label>
+<input type="number" id="ebook-price-admin" step="0.01" min="0" value="0.00" required>
+
+<label for="ebook-cover-image-url-admin">Cover Image URL:</label>
+<input type="text" id="ebook-cover-image-url-admin" placeholder="https://example.com/cover.jpg" required>
+
+<label for="ebook-download-url-admin">Ebook Download URL (PDF, EPUB, etc.):</label>
+<input type="text" id="ebook-download-url-admin" placeholder="https://example.com/ebook.pdf" required>
+
+<label for="ebook-description-admin">Description:</label>
+<textarea id="ebook-description-admin" rows="4" placeholder="A brief summary of the ebook content."></textarea>
+
+<button type="submit">Add Ebook</button>
+<p id="admin-message"></p>
+</form>
+</div>
+</div>
+</section>
+
+<!-- NEW: Ebook Detail Page Section -->
+<section id="ebook-detail" class="page-section">
+<div class="wrap">
+<div class="back-button-container">
+<button class="back-button" onclick="goBackToPreviousSection()"> &larr; Back to Books</button>
+</div>
+<div id="ebook-detail-content">
+<div id="ebook-detail-main">
+<img id="ebook-detail-cover-img" src="" alt="Book cover">
+<div id="ebook-detail-info">
+<h2 id="ebook-detail-title"></h2>
+<div class="author" id="ebook-detail-author"></div>
+<div class="price" id="ebook-detail-price"></div>
+<p id="ebook-detail-description"></p>
+<a id="ebook-detail-buy-btn" class="btn detail-buy-btn" target="_blank" rel="noopener noreferrer">Buy / Download Ebook</a>
+</div>
+</div>
+
+<div class="related-books-section">
+<h3>More from this Author</h3>
+<div class="product-grid" id="author-books-list">
+<p>Loading more books by this author...</p>
+</div>
+</div>
+
+<div class="related-books-section">
+<h3>You Might Also Like</h3>
+<div class="product-grid" id="similar-books-list">
+<p>Loading similar books...</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer>
+© <span id="year"></span> Lumee — All rights reserved
+</footer>
+
+<!-- NEW: Sign In Modal -->
+<div id="signin-modal" class="modal-overlay" onclick="closeModal('signin-modal', event)">
+<div class="modal-content auth-modal-content" onclick="event.stopPropagation()">
+<button class="close-btn" onclick="closeModal('signin-modal')">&times;</button>
+<h2 id="signin-modal-title">Sign In to Lumee</h2>
+<form id="signInForm">
+<input type="email" id="signInEmail" placeholder="Email" required>
+<input type="password" id="signInPassword" placeholder="Password" required>
+<button type="submit">Sign In</button>
+</form>
+<div id="signInError" class="auth-error"></div>
+</div>
+</div>
+
+<!-- NEW: Register Modal -->
+<div id="register-modal" class="modal-overlay" onclick="closeModal('register-modal', event)">
+<div class="modal-content auth-modal-content" onclick="event.stopPropagation()">
+<button class="close-btn" onclick="closeModal('register-modal')">&times;</button>
+<h2 id="register-modal-title">Join Lumee</h2>
+<form id="registerForm">
+<input type="email" id="registerEmail" placeholder="Email" required>
+<input type="password" id="registerPassword" placeholder="Password" required minlength="6">
+<button type="submit">Register</button>
+</form>
+<div id="registerError" class="auth-error"></div>
+</div>
+</div>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// --- Mock Data and Persistence ---
+const LOCAL_STORAGE_BOOKS_KEY = 'lumee_ebooks';
+const LOCAL_STORAGE_USER_KEY = 'lumee_user';
+const LOCAL_STORAGE_ACTIVE_SECTION_KEY = 'lumee_active_section';
+
+let loadedEbooks = [];
+let currentUser = null; // Represents the logged-in user
+let currentActiveSection = 'home'; // Track the currently active section
+window.previousSectionId = 'home'; // Global for back button logic
+
+// Initial mock data if local storage is empty
+function initializeMockData() {
+if (!localStorage.getItem(LOCAL_STORAGE_BOOKS_KEY)) {
+const initialBooks = [
+{
+id: 'book1',
+title: 'The Design of Everyday Things',
+author: 'Don Norman',
+price: 599.00,
+coverImageUrl: 'https://images-na.ssl-images-amazon.com/images/I/41pI1zV7YQL._SX323_BO1,204,203,200_.jpg',
+downloadUrl: 'https://example.com/don_norman_design_everyday_things.pdf',
+description: 'A classic in usability and design thinking. Don Norman explains why some products satisfy customers and others only frustrate them.'
+},
+{
+id: 'book2',
+title: 'Hooked: How to Build Habit-Forming Products',
+author: 'Nir Eyal',
+price: 450.50,
+coverImageUrl: 'https://images-na.ssl-images-amazon.com/images/I/41d-e-xP6BL._SX331_BO1,204,203,200_.jpg',
+downloadUrl: 'https://example.com/nir_eyal_hooked.pdf',
+description: 'Written for product managers, designers, marketers, startup founders, and anyone interested in understanding how products influence our behavior.'
+},
+{
+id: 'book3',
+title: 'The Lean Startup',
+author: 'Eric Ries',
+price: 620.00,
+coverImageUrl: 'https://images-na.ssl-images-amazon.com/images/I/51Zymoq7UnL._SX325_BO1,204,203,200_.jpg',
+downloadUrl: 'https://example.com/eric_ries_lean_startup.pdf',
+description: 'A scientific approach to creating and managing successful startups in an age when companies need to innovate more than ever.'
+},
+{
+id: 'book4',
+title: 'Atomic Habits',
+author: 'James Clear',
+price: 380.00,
+coverImageUrl: 'https://images-na.ssl-images-amazon.com/images/I/513Y5o-Dy5L._SX322_BO1,204,203,200_.jpg',
+downloadUrl: 'https://example.com/james_clear_atomic_habits.pdf',
+description: 'An easy & proven way to build good habits & break bad ones. Clear reveals practical strategies that will teach you exactly how to form good habits.'
+},
+{
+id: 'book5',
+title: 'Deep Work',
+author: 'Cal Newport',
+price: 490.00,
+coverImageUrl: 'https://images-na.ssl-images-amazon.com/images/I/41J4c-DrpXL._SX322_BO1,204,203,200_.jpg',
+downloadUrl: 'https://example.com/cal_newport_deep_work.pdf',
+description: 'Rules for Focused Success in a Distracted World. Cal Newport argues that in an increasingly competitive knowledge economy, deep work is a superpower.'
+}
+];
+localStorage.setItem(LOCAL_STORAGE_BOOKS_KEY, JSON.stringify(initialBooks));
+}
+}
+
+// Function to save and restore active section
+function saveActiveSection(sectionId) {
+localStorage.setItem(LOCAL_STORAGE_ACTIVE_SECTION_KEY, sectionId);
+currentActiveSection = sectionId;
+}
+
+function restoreActiveSection() {
+const savedSection = localStorage.getItem(LOCAL_STORAGE_ACTIVE_SECTION_KEY);
+if (savedSection && document.getElementById(savedSection)) {
+showSection(savedSection);
+} else {
+showSection('home');
+}
+}
+
+// Function to generate a product card HTML
+function createProductCard(book) {
+return `
+<article class="card" onclick="showEbookDetail('${book.id}')">
+<img src="${book.coverImageUrl}" alt="${book.title} cover">
+<div class="card-body">
+<h3>${book.title}</h3>
+<div class="author">by ${book.author}</div>
+<div class="price">₹${book.price.toFixed(2)}</div>
+</div>
+</article>`;
+}
+
+// Function to load products into a given list element
+function loadProducts(elementId, booksToLoad) {
+const productList = document.getElementById(elementId);
+if (productList) {
+productList.innerHTML = booksToLoad.map(book => createProductCard(book)).join('');
+if (booksToLoad.length === 0) {
+productList.innerHTML = '<p style="text-align:center;color:var(--muted);">No ebooks found.</p>';
+}
+}
+}
+
+// Show specific section and hide others, plus save state
+const originalShowSection = function(sectionId) {
+document.querySelectorAll('.page-section').forEach(section => {
+section.classList.remove('active');
+});
+const targetSection = document.getElementById(sectionId);
+if (targetSection) {
+targetSection.classList.add('active');
+saveActiveSection(sectionId);
+}
+
+closeModal('signin-modal');
+closeModal('register-modal');
+
+// Re-fetch ebooks if navigating to relevant sections
+if (sectionId === 'books' || sectionId === 'home') {
+fetchEbooks();
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+searchInput.value = '';
+filterBooks(); // Apply filter after fetching
+}
+}
+
+// Update admin panel visibility based on sign-in status
+updateAdminPanelVisibility(currentUser, sectionId);
+};
+
+// Global showSection variable, allowing it to be overridden for back button logic
+window.showSection = function(sectionId) {
+if (currentActiveSection!== sectionId) {
+window.previousSectionId = currentActiveSection;
+}
+originalShowSection(sectionId);
+};
+
+// Function to navigate to ebook detail page
+function showEbookDetail(ebookId) {
+const ebook = loadedEbooks.find(b => b.id === ebookId);
+if (!ebook) {
+console.error("Ebook not found:", ebookId);
+showSection('books'); // Fallback to books section
+return;
+}
+
+const bookData = ebook; // bookData is now the ebook object itself
+
+document.getElementById('ebook-detail-cover-img').src = bookData.coverImageUrl;
+document.getElementById('ebook-detail-cover-img').alt = `${bookData.title} cover`;
+document.getElementById('ebook-detail-title').textContent = bookData.title;
+document.getElementById('ebook-detail-author').textContent = `by ${bookData.author}`;
+document.getElementById('ebook-detail-price').textContent = `₹${bookData.price.toFixed(2)}`;
+document.getElementById('ebook-detail-description').textContent = bookData.description || 'No description available.';
+
+const buyButton = document.getElementById('ebook-detail-buy-btn');
+if (bookData.downloadUrl) {
+buyButton.href = bookData.downloadUrl;
+buyButton.style.display = 'inline-block';
+} else {
+buyButton.removeAttribute('href');
+buyButton.style.display = 'none';
+}
+
+// Load related books
+loadAuthorBooks(bookData.author, ebookId);
+loadSimilarBooks(ebookId); // Simplified for now
+
+showSection('ebook-detail');
+}
+
+// Go back functionality
+function goBackToPreviousSection() {
+showSection(window.previousSectionId);
+}
+
+// Close Modal - improved to only close on overlay or actual close button
+function closeModal(modalId, event = null){
+const modalElement = document.getElementById(modalId);
+if (!modalElement) return;
+
+if (event) {
+const clickedElement = event.target;
+// Check if clicked element is the modal overlay itself or a close button
+if (clickedElement === modalElement || clickedElement.closest('.close-btn')) {
+modalElement.classList.remove('active');
+}
+} else {
+modalElement.classList.remove('active');
+}
+}
+
+// Function to filter books based on search input
+function filterBooks() {
+const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+const filteredEbooks = loadedEbooks.filter(ebook =>
+ebook.title.toLowerCase().includes(searchTerm) ||
+ebook.author.toLowerCase().includes(searchTerm)
+);
+loadProducts('all-books-list', filteredEbooks);
+}
+
+// Load books by the same author
+function loadAuthorBooks(author, currentEbookId) {
+const authorBooks = loadedEbooks.filter(ebook =>
+ebook.author === author && ebook.id!== currentEbookId
+);
+loadProducts('author-books-list', authorBooks);
+}
+
+// Load similar books (simplified for now, could be improved with tags/categories)
+function loadSimilarBooks(currentEbookId) {
+// Get a few random books that are not the current one or by the same author
+const similarBooks = loadedEbooks.filter(ebook => ebook.id!== currentEbookId)
+.sort(() => 0.5 - Math.random()) // Randomize order
+.slice(0, 3); // Take top 3
+loadProducts('similar-books-list', similarBooks);
+}
+
+// Fetch Ebooks from local storage
+function fetchEbooks() {
+const homepageList = document.getElementById('homepage-ebook-list');
+const allBooksList = document.getElementById('all-books-list');
+if (homepageList) homepageList.innerHTML = '<p>Loading featured ebooks...</p>';
+if (allBooksList) allBooksList.innerHTML = '<p>Loading all ebooks...</p>';
+
+try {
+const storedBooks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_BOOKS_KEY) || '[]');
+loadedEbooks = storedBooks;
+
+if (loadedEbooks.length === 0) {
+if (homepageList) homepageList.innerHTML = '<p>No featured ebooks available yet.</p>';
+if (allBooksList) allBooksList.innerHTML = '<p>No ebooks available yet.</p>';
+} else {
+loadProducts('homepage-ebook-list', loadedEbooks.slice(0, 3));
+loadProducts('all-books-list', loadedEbooks);
+}
+} catch (error) {
+console.error("Error fetching ebooks:", error);
+if (homepageList) homepageList.innerHTML = `<p style="color:var(--error-red);">Error loading featured ebooks: ${error.message}</p>`;
+if (allBooksList) allBooksList.innerHTML = `<p style="color:var(--error-red);">Error loading all ebooks: ${error.message}</p>`;
+}
+}
+
+// Admin Panel functions
+document.getElementById('add-ebook-form-admin').addEventListener('submit', function(e) {
+e.preventDefault();
+const title = document.getElementById('ebook-title-admin').value;
+const author = document.getElementById('ebook-author-admin').value;
+const price = parseFloat(document.getElementById('ebook-price-admin').value);
+const coverImageUrl = document.getElementById('ebook-cover-image-url-admin').value;
+const downloadUrl = document.getElementById('ebook-download-url-admin').value;
+const description = document.getElementById('ebook-description-admin').value;
+
+const adminMessage = document.getElementById('admin-message');
+
+if (!title ||!author || isNaN(price) || price < 0 ||!coverImageUrl) {
+adminMessage.textContent = 'Please fill in all required fields (Title, Author, Price, Cover Image URL).';
+adminMessage.className = 'auth-error'; // Using auth-error for consistent styling
+adminMessage.style.display = 'block';
+return;
+}
+adminMessage.style.display = 'none';
+
+const newEbook = {
+id: 'book' + Date.now(), // Simple unique ID
+title,
+author,
+price,
+coverImageUrl,
+downloadUrl,
+description
+};
+
+loadedEbooks.push(newEbook);
+localStorage.setItem(LOCAL_STORAGE_BOOKS_KEY, JSON.stringify(loadedEbooks));
+
+adminMessage.textContent = 'Ebook added successfully!';
+adminMessage.className = 'admin-message success'; // Ensure proper class for success styling
+adminMessage.style.display = 'block';
+this.reset();
+fetchEbooks(); // Refresh book lists
+});
+
+// --- Authentication (Mock) ---
+// For simplicity, we'll have a hardcoded 'admin' user and store current user in localStorage
+const MOCK_ADMIN_EMAIL = 'admin@example.com';
+const MOCK_ADMIN_PASSWORD = 'password'; // For demo only, never do this in real app!
+
+function loadCurrentUser() {
+const storedUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+if (storedUser) {
+currentUser = JSON.parse(storedUser);
+}
+}
+
+function saveCurrentUser(user) {
+currentUser = user;
+localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(currentUser));
+updateAuthControls(currentUser);
+}
+
+function clearCurrentUser() {
+currentUser = null;
+localStorage.removeItem(LOCAL_STORAGE_USER_KEY);
+updateAuthControls(null);
+}
+
+// Open Sign In Modal
+function openSignInModal() {
+document.getElementById('signInForm').reset();
+document.getElementById('signInError').style.display = 'none';
+document.getElementById('signin-modal').classList.add('active');
+}
+
+// Open Register Modal
+function openRegisterModal() {
+document.getElementById('registerForm').reset();
+document.getElementById('registerError').style.display = 'none';
+document.getElementById('register-modal').classList.add('active');
+}
+
+// Helper to toggle admin panel visibility
+function updateAdminPanelVisibility(user, currentSection) {
+const adminPanelContainer = document.getElementById('admin-panel-container');
+const adminNavLink = document.getElementById('adminNavLink');
+
+if (user && user.email === MOCK_ADMIN_EMAIL) { // Only admin user can see admin panel
+adminNavLink.style.display = 'inline-block'; // Show admin link in navbar
+if (currentSection === 'admin') {
+adminPanelContainer.style.display = 'block'; // Show admin panel content if on admin section
+} else {
+adminPanelContainer.style.display = 'none'; // Hide if not on admin section
+}
+} else {
+adminNavLink.style.display = 'none'; // Hide admin link
+adminPanelContainer.style.display = 'none'; // Hide admin panel content
+// If user was on admin section and logs out, redirect to home
+if (currentSection === 'admin') {
+showSection('home');
+}
+}
+}
+
+// Update Auth Controls in Navbar (with dropdown)
+function updateAuthControls(user = null) {
+const authControls = document.getElementById('authControls');
+
+if (user) {
+const username = user.email.split('@')[0];
+authControls.innerHTML = `
+<div class="user-profile-dropdown">
+<button class="dropdown-toggle">Hello, ${username}</button>
+<div class="dropdown-menu">
+<a onclick="signOutUser()">Sign Out</a>
+</div>
+</div>
+`;
+} else {
+authControls.innerHTML = `
+<button onclick="openSignInModal()">Sign In</button>
+<button onclick="openRegisterModal()">Register</button>
+`;
+}
+updateAdminPanelVisibility(user, currentActiveSection); // Always update visibility after auth change
+}
+
+// Handle Sign In form submission (Mock)
+document.getElementById('signInForm').addEventListener('submit', async (e) => {
+e.preventDefault();
+const email = document.getElementById('signInEmail').value;
+const password = document.getElementById('signInPassword').value;
+const signInError = document.getElementById('signInError');
+signInError.style.display = 'none';
+
+if (email === MOCK_ADMIN_EMAIL && password === MOCK_ADMIN_PASSWORD) {
+// Simulating successful login
+saveCurrentUser({ email: MOCK_ADMIN_EMAIL, uid: 'mock_admin_uid' });
+closeModal('signin-modal');
+alert(`Welcome back, ${MOCK_ADMIN_EMAIL}! You are now signed in.`);
+} else {
+signInError.textContent = 'Invalid email or password.';
+signInError.style.display = 'block';
+}
+});
+
+// Handle Register form submission (Mock - for now, only admin account supported)
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+e.preventDefault();
+const email = document.getElementById('registerEmail').value;
+const password = document.getElementById('registerPassword').value;
+const registerError = document.getElementById('registerError');
+registerError.style.display = 'none';
+
+if (email === MOCK_ADMIN_EMAIL) {
+registerError.textContent = 'Admin account already exists. Please sign in.';
+registerError.style.display = 'block';
+} else {
+// In a real app, this would create a new user. Here, we just inform the user.
+registerError.textContent = 'For this demo, only the admin account (admin@example.com / password) is supported. Please sign in with that.';
+registerError.style.display = 'block';
+}
+});
+
+// Function to handle sign out (Mock)
+function signOutUser() {
+clearCurrentUser();
+alert("You have been signed out.");
+showSection('home'); // Redirect to home after logout
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+initializeMockData(); // Ensure there's some initial data
+fetchEbooks(); // Fetch ebooks from local storage
+loadCurrentUser(); // Load user state from local storage
+restoreActiveSection(); // Restore previous section or default to home
+updateAuthControls(currentUser); // Initial auth control setup
+});
+</script>
+
+</body>
+</html>
